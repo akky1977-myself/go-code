@@ -1,0 +1,7 @@
+$ cd <project root folder>
+
+create go mode file
+$ go mod init github.com/pluralsight/webservice
+
+** so you can run go as 
+$ go run github.com/<your git hub username>/webservice

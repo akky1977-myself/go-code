@@ -1,0 +1,71 @@
+Install go
+
+$ cd
+$ mkdir ~/go-compose
+$ cd go-compose
+
+macOS package installer (If you need to install go)
+url: https://golang.org/doc/install#:~:text=macOS%20package%20installer,in%20your%20PATH%20environment%20variable.
+
+The package should put the /usr/local/go/bin
+$ export GOPATH=/usr/local/go/bin
+** need to restart your terminal
+
+Docker Compose 
+
+$ mkdir go
+$ cd ./go
+$ touch main.go
+$ touch GoDockerfile 
+$ cd ../ 
+$ touch docker-compose.yml
+
+        main.go
+            package main
+
+            import (
+                "fmt"
+                "net/http"
+            )
+
+            func main() {
+                fmt.Println("Go Docker-compose Tutorial")
+
+                http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+                    fmt.Fprintf(w, "sever is running!")
+                })
+
+                http.ListenAndServe(":7070", nil)
+            }
+
+        GoDockerfile 
+
+            FROM golang:1.12.0-alpine3.9
+            RUN mkdir /app
+            ADD . /app
+            WORKDIR /app
+            RUN go build -o main .
+            CMD [ "/app/main" ]
+
+        docker-compose.yml
+
+            version: '3'
+            services:
+            go_app:
+                build: 
+                    context: ./go
+                    dockerfile: GoDockerfile
+                ports:
+                - "<browser_port>:<docker_port>"
+                container_name: go_app_container 
+
+
+Docker Compose commands
+
+$ docker-compose up --build -d
+$ docker-compose up -doc
+$ docker-compose down
+
+
+Web address
+http://localhost:7075/
